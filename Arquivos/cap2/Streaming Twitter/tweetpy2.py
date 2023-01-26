@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-"""
-
+#importa bibliotecas
 import tweepy as tw
-import socket
+import socket #para ler portas e enviar dados pela porta
 import json
 import os
 from dotenv import load_dotenv
@@ -24,7 +19,7 @@ class TweetsListener(tw.Stream):
         super().__init__(*args)
         self.client_socket = csocket
         self.count=0
-        self.limit=3
+        self.limit=30 #limite de 30 tweetters apenas para não rodar infinito
 
     def on_data(self, data):
         try:
