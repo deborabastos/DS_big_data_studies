@@ -27,8 +27,8 @@ class TweetsListener(tw.Stream):
             self.count+=1            			#incrementa o contador
             if self.count<=self.limit:     
                 print(msg['text'].encode('utf-8'))	#verifica a quantidade de twitters lidos
-                self.client_socket.send( msg['text'].encode('utf-8')) #envia a mensagem para o socket
                 print("-----------------------------------------------------------")
+                self.client_socket.send( msg['text'].encode('utf-8')) #envia a mensagem para o socket
             return True
         except BaseException as e:
             print("Error on_data: %s" % str(e))
