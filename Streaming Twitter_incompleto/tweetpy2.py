@@ -14,7 +14,6 @@ access_token = os.environ['access_token']
 access_token_secret = os.environ['access_token_secret']
 
 class TweetsListener(tw.Stream):
-
     def __init__(self, *args, csocket):  #construtor
         super().__init__(*args)
         self.client_socket = csocket
