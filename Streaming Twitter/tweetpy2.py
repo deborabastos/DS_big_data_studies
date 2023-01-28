@@ -1,6 +1,7 @@
 #importa bibliotecas
 import tweepy as tw
-import socket #para ler portas e enviar dados pela porta
+import socket #para ler portas, enviar e receber dados pela porta
+import time
 import json
 import os
 from dotenv import load_dotenv
@@ -14,23 +15,34 @@ access_token = os.environ['access_token']
 access_token_secret = os.environ['access_token_secret']
 
 class TweetsListener(tw.Stream):
-
     def __init__(self, *args, csocket):  #construtor
         super().__init__(*args)
         self.client_socket = csocket
         self.count=0
-        self.limit=30 #limite de 30 tweetters apenas para não rodar infinito
+        self.limit=5 #limite de 5 tweets apenas para não rodar infinito
 
     def on_data(self, data):
         try:
-            msg = json.loads( data ) 			#lê os twitters
+            print("entrou try") 
+            msg = json.loads(data) 			#lê os twitters
             self.count+=1            			#incrementa o contador
-            if self.count<=self.limit:     
-                print(msg['text'].encode('utf-8'))	#verifica a quantidade de twitters lidos
-                self.client_socket.send( msg['text'].encode('utf-8')) #envia a mensagem para o socket
+            if self.count<=self.limit:    
+                print(msg['text'].encode("utf-8"))	#verifica a quantidade de twitters lidos
+                print("-----------------------------------------------------------")
+
+                #ERRO AQUI!!!!! AS VEZES MANDANDO PARA EXCEPT .  
+                # [Errno 32] Broken pipe
+                #exception BrokenPipeError A subclass of ConnectionError, raised when trying to write on a pipe while the other end has been closed, or trying to write on a socket which has been shutdown for writing. Corresponds to errno EPIPE and ESHUTDOWN.
+                #envia a mensagem para o socket ## Prov;avelmente por conta de unicode
+                self.client_socket.send(msg['text'].encode("utf-8")) 
+                #https://stackoverflow.com/questions/58454819/tweepy-streaming-socket-cant-send-preprocessed-text
+
+
+                time.sleep(1)
             return True
         except BaseException as e:
             print("Error on_data: %s" % str(e))
+            print("-----------------------------------------------------------")
         return True
 
     def on_error(self, status):
@@ -46,7 +58,7 @@ def sendData(c_socket):     				#define como os dados devem ser enviados
         csocket=c_socket
     )
 
-        twitter_stream.filter(track=['nfl'])  #define o filtro a ser utilizado 
+        twitter_stream.filter(track=['BBB23'])  #define o filtro a ser utilizado 
 
 
     except Exception as e:
