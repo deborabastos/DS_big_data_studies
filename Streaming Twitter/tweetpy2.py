@@ -23,7 +23,7 @@ class TweetsListener(tw.Stream):
 
     def on_data(self, data):
         try:
-            print("entrou try") 
+            # print("entrou try") 
             msg = json.loads(data) 			#lê os twitters
             self.count+=1            			#incrementa o contador
             if self.count<=self.limit:    
